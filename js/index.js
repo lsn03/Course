@@ -9,30 +9,21 @@ const canvas = document.querySelector('.webgl');
 let earthMesh,cloudMesh;
 
 let spaceMesh;
+let cube;
+
 function init(){
     SetupCameraAndScene();
    
     SetupOrbitControl();
-
+    AddSpace();
     AddEarthAndCloud();
-    SetupSpace();
+    
 
     animate();
 
 }
 
-function SetupSpace(){
-    const spaceGeometry = new THREE.SphereGeometry(500,100,100);
-    const spaceMaterial = new THREE.MeshPhongMaterial({
-        roughness:1,
-        metalness:0,
-        side: THREE.BackSide,
-        map: new THREE.TextureLoader().load("./texture/space.jpg")
-    });
-    spaceMesh = new THREE.Mesh(spaceGeometry,spaceMaterial);
-    scene.add(spaceMesh);
-    
-}
+
 
 function SetupOrbitControl(){
     let control = new OrbitControls( camera, renderer.domElement );
@@ -66,6 +57,7 @@ function SetupCameraAndScene(){
 
     renderer.setSize(window.innerWidth,window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
+
     //renderer.autoClear = false; // отвечает за черный/белый фон
     
 
@@ -86,7 +78,7 @@ function AddEarthAndCloud(){
     earthMesh = new THREE.Mesh(earthGeometry,earthMaterial);
     scene.add(earthMesh);
     
-    const ambientLight = new THREE.AmbientLight(0xffffff,1);
+    const ambientLight = new THREE.AmbientLight(0xffffff,1.5);
     scene.add(ambientLight);  
 
 
@@ -103,6 +95,27 @@ function AddEarthAndCloud(){
     
     earthMesh.rotateY(Math.PI);
 }
+
+function AddCube(){
+    const cubGeom = new THREE.BoxGeometry(1,1,1);
+    const cubMaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
+    cube  =new THREE.Mesh(cubGeom,cubMaterial);
+    scene.add(cube);
+}
+
+function AddSpace(){
+    const spaceGeometry = new THREE.SphereGeometry(500,100,100);
+    const spaceMaterial = new THREE.MeshPhongMaterial({
+        roughness:1,
+        metalness:0,
+        side: THREE.BackSide,
+        map: new THREE.TextureLoader().load("./texture/space.jpg")
+    });
+    spaceMesh = new THREE.Mesh(spaceGeometry,spaceMaterial);
+    scene.add(spaceMesh);
+    
+}
+
 var  animate = function (){
 
     renderer.render(scene,camera);
