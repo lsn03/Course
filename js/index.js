@@ -44,7 +44,7 @@ function SetupCameraAndScene(){
 
     camera = new THREE.PerspectiveCamera(fov,aspectWindow,near,far);
     
-    camera.position.set(-0.5,1.23,1.77);
+    camera.position.set(-1.7,1.24,2.35);
     
     
     scene.add(camera); 
@@ -113,15 +113,23 @@ function AddSpace(){
     });
     spaceMesh = new THREE.Mesh(spaceGeometry,spaceMaterial);
     scene.add(spaceMesh);
-    
+    spaceMesh.rotation.x-=0.1;
 }
 
 var  animate = function (){
 
     renderer.render(scene,camera);
-    earthMesh.rotation.y-=0.0005;
-    cloudMesh.rotation.y+=0.001;
+
+    earthMesh.rotation.y-=0.0014;
+
+    cloudMesh.rotation.y+=0.0015;
+
+    spaceMesh.rotation.y-=0.002;
+    spaceMesh.rotation.x-=0.002;
+
     console.log(camera.position.x+"\t"+camera.position.y+"\t"+camera.position.z);
+
+    
     requestAnimationFrame(animate);
 };
 
