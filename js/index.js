@@ -6,7 +6,26 @@ let camera,scene,renderer;
 const canvas = document.querySelector('.webgl');
 let earthMesh,cloudMesh;
 function init(){
+    SetupCameraAndScene();
+   
+    SetupOrbitControl();
 
+    AddEarthAndCloud();
+
+    animate();
+
+}
+
+function SetupOrbitControl(){
+    let control = new OrbitControls( camera, renderer.domElement );
+    
+    control.addEventListener('change',renderer)
+
+    control.minDistance = 2;
+    control.maxDistance = 5;
+}
+
+function SetupCameraAndScene(){
     scene = new THREE.Scene();
 
     let fov = 60; // поле зрения/угол обзора
@@ -17,7 +36,7 @@ function init(){
     camera = new THREE.PerspectiveCamera(fov,aspectWindow,near,far);
     
     camera.position.set(-0.5,1.23,1.77);
-    //camera.position.z = 2;
+    
     
     scene.add(camera); 
     
@@ -34,6 +53,9 @@ function init(){
 
     document.body.append(renderer.domElement);
 
+} 
+
+function AddEarthAndCloud(){
     const earthGeometry = new THREE.SphereGeometry(1,32,32);
     const earthMaterial = new THREE.MeshPhongMaterial(
         {
@@ -43,16 +65,13 @@ function init(){
         }
     );
 
-     earthMesh = new THREE.Mesh(earthGeometry,earthMaterial);
+    earthMesh = new THREE.Mesh(earthGeometry,earthMaterial);
     scene.add(earthMesh);
     
-    const ambientLight = new THREE.AmbientLight(0xffffff,1);
+    const ambientLight = new THREE.AmbientLight(0xffffff,1.5);
     scene.add(ambientLight);  
 
-   /* const pointLight = new THREE.PointLight(0xffffff,1);
-    pointLight.position.set(5,3,5);
-    scene.add(pointLight);
-*/
+
     const cloudGeom = new THREE.SphereGeometry(1.05,32,32);
     const cloudMat = new THREE.MeshPhongMaterial({
         map: new THREE.TextureLoader().load("./texture/8k_earth_clouds.jpg"),
@@ -62,19 +81,9 @@ function init(){
     });
      cloudMesh = new THREE.Mesh(cloudGeom,cloudMat);
     scene.add(cloudMesh);
-
-    let control = new OrbitControls( camera, renderer.domElement );
-
     
-    control.addEventListener('change',renderer)
-
-    //control.minDistance = 500;
-    //control.maxDistance = 1500;
+    
     earthMesh.rotateY(Math.PI);
-    //earthMesh.rotateX(Math.PI/2);
-
-    animate();
-
 }
 var  animate = function (){
 
