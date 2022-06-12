@@ -1,24 +1,42 @@
 import * as THREE from './three.module.js';
 import {OrbitControls} from './OrbitControls.js';
+//import { BackSide } from 'three';
 
 let camera,scene,renderer;
 
 const canvas = document.querySelector('.webgl');
+
 let earthMesh,cloudMesh;
+
+let spaceMesh;
 function init(){
     SetupCameraAndScene();
    
     SetupOrbitControl();
 
     AddEarthAndCloud();
+    SetupSpace();
 
     animate();
 
 }
 
+function SetupSpace(){
+    const spaceGeometry = new THREE.SphereGeometry(500,100,100);
+    const spaceMaterial = new THREE.MeshPhongMaterial({
+        roughness:1,
+        metalness:0,
+        side: THREE.BackSide,
+        map: new THREE.TextureLoader().load("./texture/space.jpg")
+    });
+    spaceMesh = new THREE.Mesh(spaceGeometry,spaceMaterial);
+    scene.add(spaceMesh);
+    
+}
+
 function SetupOrbitControl(){
     let control = new OrbitControls( camera, renderer.domElement );
-    
+
     control.addEventListener('change',renderer)
 
     control.minDistance = 2;
@@ -68,15 +86,15 @@ function AddEarthAndCloud(){
     earthMesh = new THREE.Mesh(earthGeometry,earthMaterial);
     scene.add(earthMesh);
     
-    const ambientLight = new THREE.AmbientLight(0xffffff,1.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff,1);
     scene.add(ambientLight);  
 
 
     const cloudGeom = new THREE.SphereGeometry(1.05,32,32);
     const cloudMat = new THREE.MeshPhongMaterial({
         map: new THREE.TextureLoader().load("./texture/8k_earth_clouds.jpg"),
-        //map: THREE.ImageUtils.loadTexture("texture/8k_earth_clouds.jpg"),
-        opacity:0.1, // прозрачнось облаков
+        
+        opacity:0.2, // прозрачнось облаков
         transparent:true
     });
      cloudMesh = new THREE.Mesh(cloudGeom,cloudMat);
