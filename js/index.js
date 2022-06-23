@@ -12,10 +12,13 @@ let spaceMesh;
 let cube;
 
 function init(){
+    
     SetupCameraAndScene();
    
     SetupOrbitControl();
+
     AddSpace();
+    
     AddEarthAndCloud();
     
 
@@ -38,9 +41,9 @@ function SetupCameraAndScene(){
     scene = new THREE.Scene();
 
     let fov = 60; // поле зрения/угол обзора
-    let aspectWindow = window.innerWidth/window.innerHeight;
-    let near = 0.1; // дистанция 
-    let far = 15000;
+    let aspectWindow = window.innerWidth/window.innerHeight; // соотношение сторон
+    let near = 0.1; // ближняя плсокость
+    let far = 15000; // дальняя плоскость
 
     camera = new THREE.PerspectiveCamera(fov,aspectWindow,near,far);
     
@@ -55,18 +58,13 @@ function SetupCameraAndScene(){
     });
     
 
-    renderer.setSize(window.innerWidth,window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-
-    //renderer.autoClear = false; // отвечает за черный/белый фон
-    
-
+    renderer.setSize(window.innerWidth,window.innerHeight); // устанавливает размер по шинире,высоте доступного экрана, без обновления
     document.body.append(renderer.domElement);
 
 } 
 
 function AddEarthAndCloud(){
-    const earthGeometry = new THREE.SphereGeometry(1,32,32);
+    const earthGeometry = new THREE.SphereGeometry(1,32,32);//радиус , количество горизонт и верт сегментов
     const earthMaterial = new THREE.MeshPhongMaterial(
         {
             roughness:1,
@@ -106,8 +104,8 @@ function AddCube(){
 function AddSpace(){
     const spaceGeometry = new THREE.SphereGeometry(500,100,100);
     const spaceMaterial = new THREE.MeshPhongMaterial({
-        roughness:1,
-        metalness:0,
+        roughness:1, // шереховатость
+        
         side: THREE.BackSide,
         map: new THREE.TextureLoader().load("./texture/space.jpg")
     });
@@ -120,12 +118,12 @@ var  animate = function (){
 
     renderer.render(scene,camera);
 
-    earthMesh.rotation.y-=0.0014;
+    earthMesh.rotation.y-=0.0018;
 
-    cloudMesh.rotation.y+=0.0015;
+    cloudMesh.rotation.y+=0.002;
 
-    spaceMesh.rotation.y-=0.002;
-    spaceMesh.rotation.x-=0.002;
+    spaceMesh.rotation.y-=0.0012;
+    spaceMesh.rotation.x-=0.0012;
 
     console.log(camera.position.x+"\t"+camera.position.y+"\t"+camera.position.z);
 
